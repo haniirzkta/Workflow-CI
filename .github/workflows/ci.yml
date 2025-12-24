@@ -1,4 +1,4 @@
-name: MLflow CI Skilled
+name: MLflow CI
 
 on:
   push:
@@ -14,38 +14,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Setup Miniconda
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2
+      # 2. Setup Python 3.12
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: 3.12
-          auto-activate-base: true
 
-      # 3. Create conda environment
-      - name: Create conda environment
+      # 3. Install dependencies
+      - name: Install Python dependencies
         run: |
-          conda env create -f MLProject/conda.yaml
-          conda info --envs
-          
-      # 4. Activate environment and install MLflow
-      - name: Activate environment & install MLflow
-        run: |
-          source $(conda info --base)/etc/profile.d/conda.sh
-          conda activate mlflow-env
-          pip install --upgrade mlflow
+          python -m pip install --upgrade pip
+          pip install mlflow scikit-learn pandas numpy
 
-      # 5. Set MLflow Tracking URI
+      # 4. Set MLflow Tracking URI (local)
       - name: Set MLflow Tracking URI
         run: echo "MLFLOW_TRACKING_URI=mlruns" >> $GITHUB_ENV
 
-      # 6. Run MLflow Project
+      # 5. Run MLflow Project
       - name: Run MLflow Project
         run: |
-          source $(conda info --base)/etc/profile.d/conda.sh
-          conda activate mlflow-env
-          mlflow run MLProject -P data_path="MLProject/heart_preprocessing/dataclean.csv"
+          mlflow run MLProject --env-manager=local
 
-      # 7. Commit artefak model ke GitHub
+
+      # 6. Commit artefak model ke GitHub
       - name: Commit MLflow artifacts
         run: |
           git config --global user.name "github-actions"
