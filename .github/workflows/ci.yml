@@ -43,7 +43,7 @@ jobs:
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate mlflow-env
-          mlflow run MLProject -P data_path="MLProject/heart_preprocessing/data.clean.csv"
+          mlflow run MLProject -P data_path="MLProject/heart_preprocessing/dataclean.csv"
 
       # 7. Commit artefak model ke GitHub
       - name: Commit MLflow artifacts
