@@ -1,0 +1,45 @@
+name: MLflow CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-train:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Setup Python
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mlflow scikit-learn pandas numpy
+
+      # 4. Set MLflow Tracking URI (local)
+      - name: Set MLflow Tracking URI
+        run: echo "MLFLOW_TRACKING_URI=mlruns" >> $GITHUB_ENV
+
+      # 5. Run MLflow project
+      - name: Run MLflow Project
+        run: |
+          mlflow run MLProject/MLProject -P data_path="MLProject/heart_preprocessing/data.clean.csv"
+
+      # 6. Commit artefak model ke GitHub
+      - name: Commit MLflow artifacts
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add MLProject/artifacts
+          git commit -m "Add MLflow model artifacts [ci skip]" || echo "No changes to commit"
+          git push
