@@ -21,16 +21,16 @@ jobs:
           python-version: 3.12
 
       # 3. Install dependencies
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install mlflow scikit-learn pandas numpy
 
-      # 4. Set MLflow Tracking URI (LOCAL)
+      # 4. Set MLflow Tracking URI
       - name: Set MLflow Tracking URI
         run: echo "MLFLOW_TRACKING_URI=mlruns" >> $GITHUB_ENV
 
-      # 5. Run MLflow Project (INI POIN PENTING)
+      # 5. Run MLflow Project (INI YANG DINILAI)
       - name: Run MLflow Project
         run: |
           mlflow run MLProject --env-manager=local
