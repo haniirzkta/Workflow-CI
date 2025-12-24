@@ -30,17 +30,22 @@ jobs:
       - name: Set MLflow Tracking URI
         run: echo "MLFLOW_TRACKING_URI=mlruns" >> $GITHUB_ENV
 
-      # 5. Run MLflow Project
+      # 5. Create artifacts folder if not exist
+      - name: Ensure artifacts folder exists
+        run: |
+          mkdir -p MLProject/artifacts
+          touch MLProject/artifacts/.gitkeep
+
+      # 6. Run MLflow Project
       - name: Run MLflow Project
         run: |
           mlflow run MLProject --env-manager=local
 
-
-      # 6. Commit artefak model ke GitHub
+      # 7. Commit artifacts model to GitHub (only if changes exist)
       - name: Commit MLflow artifacts
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add MLProject/artifacts
-          git commit -m "Add MLflow model artifacts [ci skip]" || echo "No changes to commit"
+          git diff --cached --quiet || git commit -m "Add MLflow model artifacts [ci skip]"
           git push
