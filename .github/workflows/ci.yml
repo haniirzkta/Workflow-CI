@@ -51,3 +51,4 @@ jobs:
           git add MLProject/artifacts
           git diff --cached --quiet || git commit -m "Add MLflow model artifacts [ci skip]"
           git push https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}.git HEAD:ci-artifacts
+
