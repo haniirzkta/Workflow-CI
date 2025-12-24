@@ -41,7 +41,7 @@ jobs:
         run: |
           mlflow run MLProject --env-manager=local
 
-      # 7. Commit artifacts model to GitHub
+      # 7. Commit artifacts to GitHub
       - name: Commit MLflow artifacts
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
