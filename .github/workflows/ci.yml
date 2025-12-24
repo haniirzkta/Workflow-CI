@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Setup Python 3.12
+      # 2. Setup Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -26,17 +26,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install mlflow scikit-learn pandas numpy
 
-      # 4. Set MLflow Tracking URI (local)
+      # 4. Set MLflow Tracking URI (LOCAL)
       - name: Set MLflow Tracking URI
         run: echo "MLFLOW_TRACKING_URI=mlruns" >> $GITHUB_ENV
 
-      # 5. Create artifacts folder if not exist
-      - name: Ensure artifacts folder exists
-        run: |
-          mkdir -p MLProject/artifacts
-          touch MLProject/artifacts/.gitkeep
-
-      # 6. Run MLflow Project
+      # 5. Run MLflow Project (INI POIN PENTING)
       - name: Run MLflow Project
         run: |
           mlflow run MLProject --env-manager=local
+
+      # 6. Upload MLflow artifacts (mlruns)
+      - name: Upload MLflow artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: mlruns
+          path: mlruns
