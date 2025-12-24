@@ -33,7 +33,7 @@ jobs:
       # 5. Run MLflow project
       - name: Run MLflow Project
         run: |
-          mlflow run MLProject/MLProject -P data_path="MLProject/heart_preprocessing/data.clean.csv"
+          mlflow run MLProject -P data_path="MLProject/heart_preprocessing/data.clean.csv"
 
       # 6. Commit artefak model ke GitHub
       - name: Commit MLflow artifacts
